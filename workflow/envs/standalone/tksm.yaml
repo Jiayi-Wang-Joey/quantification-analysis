@@ -1,0 +1,8 @@
+channels:
+  - bioconda
+  - conda-forge
+dependencies:
+  - tksm=0.6.1
+  - badread
+  - minimap2
+  - samtools

@@ -1,0 +1,9 @@
+channels:
+  - conda-forge
+  - bioconda
+dependencies:
+  - r-base
+  - r-data.table
+  - r-r.utils
+  - r-jsonlite
+  - bioconductor-rtracklayer

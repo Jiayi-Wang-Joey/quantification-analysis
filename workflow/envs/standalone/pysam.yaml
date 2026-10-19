@@ -1,0 +1,8 @@
+channels:
+  - conda-forge
+  - bioconda
+dependencies:
+  - python
+  - pysam
+  - matplotlib
+  - pandas

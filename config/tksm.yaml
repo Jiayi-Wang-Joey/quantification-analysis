@@ -1,0 +1,24 @@
+tksm:
+  threads: 8
+
+  models:
+    training_reads: 100000
+    truncation:
+      grid_end: 20000
+      bandwidth: 100
+      five_prime_only: true
+      end_ratio: 0
+
+  pipeline:
+    - Tsb:
+        params: "--use-whole-id --non-coding"
+    - Trc:
+        model: truncation
+    - plA:
+        params: "--normal=29,2.5"
+    - Shf:
+        params: ""
+    - Seq:
+        model: H69
+        identity: "99.1,100,1.94"
+        params: "--output-format fastq"

@@ -1,0 +1,76 @@
+gencode:
+  base_url: "https://ftp.ebi.ac.uk/pub/databases/gencode/Gencode_human"
+  versions: [44, 45, 46, 47, 48, 49, 50]
+  kinds: ["comprehensive", "basic"]
+
+genome_url: "https://ftp.ncbi.nlm.nih.gov/genomes/all/GCA/000/001/405/GCA_000001405.15_GRCh38/seqs_for_alignment_pipelines.ucsc_ids/GCA_000001405.15_GRCh38_no_alt_analysis_set.fna.gz"
+
+longbench:
+  base_url: "https://longbench-data.s3.amazonaws.com/raw/fastq"
+  pacbio_file: "H69_bulk_PB.fastq.gz"
+  shortread_r1: "H69_S2_R1_001.fastq.gz"
+  shortread_r2: "H69_S2_R2_001.fastq.gz"
+
+cell_line: "H69"
+
+align:
+  n_secondary_alignments: 10
+  map_threads: 2
+  sort_threads: 1
+  sort_memory_gb: 1
+  mem_mb: 10000
+  star_index_mem_mb: 48000
+
+align_map_bam_threads: 8
+illumina_read_length: 100
+align_sort_bam_memory_gb: 2
+compression_level: 6
+stall_io_threads: 4
+
+oarfish_filter_group: "no-filters"
+quantify_isoforms_threads: 2
+oarfish_threads: 8
+quantify_mem_mb: 40000
+
+salmon_fragment_length_mean: 250
+salmon_fragment_length_sd: 25
+num_bootstraps: 30
+
+metric:
+  kvalue_threads: 2
+  samtools_stats_threads: 4
+
+# simulated truth
+simulate_dte_parametric:
+  versions: [44, 47, 48, 49, 50]
+  outdir: "results/sim_dte/parametric"
+  seed: 1
+  n_genes: 15000          # expressed genes
+  gene_type_fraction: {protein_coding: 0.80, lncRNA: 0.17, other: 0.03}  # H69 top 15,000 genes: 81/17/2
+  exclude_gene_types: [snRNA, snoRNA, miRNA, misc_RNA, scaRNA, scRNA, sRNA, vault_RNA, Y_RNA, rRNA,
+                       rRNA_pseudogene, Mt_tRNA, Mt_rRNA, ribozyme]  # small RNAs
+  sdlog: 1.4              # log-normal; H69 top 15,000 genes: 1.3-1.4
+  lambda: 3               # isoforms per gene = 1 + Poisson(lambda)
+  alpha: 0.4              # isoform shares ~ Dirichlet(alpha)
+  min_share: 0.01         # floor of an isoform's share
+  frag_mean: 250          # Illumina fragment length
+  de_fraction: {dtu_swap: 0.016667, partial_dte: 0.016667, uniform: 0.016667}
+  swap_min_share: 0.1     # Soneson 2016
+  swap_min_gene_tpm: 10
+  max_targets: 3
+  abs_log2fc: [0.58, 2.58]  # 1.5- to 6-fold
+  n_reps: 3
+  bcv: 0.15
+  share_precision: 100    # null = no isoform-ratio noise
+
+# simulated reads
+simulate_reads:
+  versions: [50]                # each quantified against the same version
+  samples: [control_rep1]
+  illumina_depths: [10000000]
+  illumina_read_length: 150
+  illumina_error_rate: 0.005
+  illumina_chunk_pairs: 2000000
+  kinnex_depths: [5000000]
+  mard_min_length: 300
+  mard_min_tpm: 0.01            # miniQuant

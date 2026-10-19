@@ -1,0 +1,12 @@
+channels:
+  - bioconda
+  - conda-forge
+dependencies:
+  - r-base
+  # polyester was removed from Bioconductor as of release 3.21 -- bioconda
+  # keeps old recipes though, and 1.38.0 is the actual latest version it has
+  # (checked via the anaconda.org API: versions list tops out at 1.38.0, not
+  # 1.42.0 as I'd first assumed without checking)
+  - bioconductor-polyester=1.38.0
+  - bioconductor-biostrings
+  - r-data.table
